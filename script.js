@@ -22,7 +22,6 @@ function appendToTable(data=[]){
     }
     table.appendChild(row);
   }
-
   return;
 }
 
