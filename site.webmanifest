@@ -1,0 +1,12 @@
+{
+  "short_name": "",
+  "name": "",
+  "icons": [{
+    "src": "assets/bus.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }],
+  "start_url": "/?utm_source=homescreen",
+  "background_color": "#1a242f",
+  "theme_color": "#f7f7f7"
+}
