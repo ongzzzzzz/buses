@@ -1,11 +1,3 @@
-:root{
-  --primary: ;
-  --primary-variant: ;
-}
+@import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css") (prefers-color-scheme: light);
 
-/* https://i.stack.imgur.com/pRiXf.png */
-
-#bigTable{
-
-}
-
+@import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css") (prefers-color-scheme: dark);
