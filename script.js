@@ -1,8 +1,10 @@
-let table = document.getElementById("bigTable");
+let tableBody = document.getElementById("tableBody");
 
 const url = "https://jp.rapidpg.com.my:10081/open/api/searcheta?stopName=smk%20chung%20ling%20(p)(kampung%20baru)";
 
 function appendToTable(data=[]){
+  //clear table first
+  tableBody.innerHTML = "";
 
   // row number == number of buses
   for (i=0; i<data.length; i++){
@@ -22,7 +24,7 @@ function appendToTable(data=[]){
     let etaList = route.etaList;    
     if(etaList == undefined || etaList.length == 0){
       var etaCell = document.createElement('td');
-      var etaText = document.createTextNode("whoops wait yixia");
+      var etaText = document.createTextNode("whoops too bad!");
       cells.push(etaCell);
       texts.push(etaText);
 
@@ -41,25 +43,39 @@ function appendToTable(data=[]){
       row.appendChild(cells[k]);
     }
 
-    table.appendChild(row);
+    tableBody.appendChild(row);
   }
   return;
 }
 
-fetch(url).then( 
-  (response) => {
-    if (response.status !== 200) {
-      console.error(`whoopsie daisie (Status Code: ${response.status})`);
-      return;
-    }
-    response.json().then(data => {
-      console.log(data.body);
-      appendToTable(data.body);
-    });
- }
-).catch((err) => {
-    console.error(`Fetch Error :-S ${err}`);
-});
+function getData(){
+  fetch(url).then( 
+    (response) => {
+      if (response.status !== 200) {
+        console.error(`whoopsie daisie (Status Code: ${response.status})`);
+        return;
+      }
+      response.json().then(data => {
+        console.log(data.body);
+        appendToTable(data.body);
+      });
+  }
+  ).catch((err) => {
+      console.error(`Fetch Error :-S ${err}`);
+  });
+}
+
+getData();
+window.setInterval(()=>{
+  getData();
+}, 60*1000);
+
+/* 
+  TODO: add time 
+  TODO: add weather
+  TODO: add tracking
+  TODO: deploy
+*/
 
 /////::::::::::SAMPLE JSON:::::::::://///
 // {

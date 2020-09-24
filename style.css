@@ -3,3 +3,13 @@
 @import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css") (prefers-color-scheme: dark);
 
 /* TODO: beautify page, add icons and background */
+html, body{
+  width: 100%;
+  height: 100%;
+}
+
+table{
+  margin: 75% auto;
+  width: 100%; 
+  
+}
