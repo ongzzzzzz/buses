@@ -10,7 +10,19 @@
     <link rel="manifest" href="site.webmanifest">
 
   </head>
-  <body>
+  <body onload="startTime()">
+    <h1>
+      <code id="time"></code>
+      <!-- https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock -->
+    </h1>
+
+    <label for="location">Where does today's adventure take you?</label>
+    <textarea name="location" id="location" placeholder="o(*≧▽≦)ツ"></textarea>
+    <form>
+      <!-- input bus stop, search from rapid API and change the get URL from there
+      https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=gurney -->
+    </form>
+
     <table>
       <tr>
         <thead>
