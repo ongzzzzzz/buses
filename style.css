@@ -2,6 +2,21 @@
 
 @import url("https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css") (prefers-color-scheme: dark);
 
+@media (prefers-color-scheme: light) {
+  :root{
+    --background: rgba(240, 240, 240, 0.75);
+    --text: rgba(23, 23, 23, 0.75);
+    --active: rgba(200, 200, 200, 0.75);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root{
+    --background: rgba(23, 23, 23, 0.75);
+    --text: rgba(240, 240, 240, 0.75);
+    --active: rgba(46, 46, 46, 0.75);
+  }
+}
+
 /* TODO: beautify page, add icons and background */
 html, body{
   width: 100%;
@@ -17,7 +32,7 @@ html, body{
 table{
   margin: 10% auto;
   width: 100%; 
-  background-color: rgba(240, 240, 240, 0.75);
+  background-color: var(--background);
   border-radius: 3vh;
 }
 
@@ -31,13 +46,15 @@ table{
   max-width: 50vw;
   float: right;
   
-  background-color: rgba(240, 240, 240, 0.75);
+  background-color: var(--background);
   border-radius: 2vh;
   padding: 1vw;
 
   text-align: center;
   overflow: auto;
   overflow-y: hidden;
+
+  color: var(--text);
 }
 
 #weather{
@@ -56,16 +73,17 @@ table{
   position: relative;
   display: inline-block;
   /* https://www.w3schools.com/howto/howto_js_autocomplete.asp */
+  color: var(--text);
 }
 
 input {
   border: 1px solid transparent;
-  background-color: #f1f1f1;
+  background-color: var(--background);
   padding: 10px;
   font-size: 16px;
 }
 input[type=text] {
-  background-color: #f1f1f1;
+  background-color: var(--background);
   width: 100%;
 }
 button[type=submit] {
@@ -86,7 +104,7 @@ button[type=submit] {
 .autocomplete-items div {
   padding: 10px;
   cursor: pointer;
-  background-color: #fff;
+  background-color: var(--background);
   border-bottom: 1px solid #d4d4d4;
 }
 .autocomplete-items div:hover {
@@ -96,5 +114,6 @@ button[type=submit] {
 .autocomplete-active {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
-  color: #ffffff;
+  color: var(--active);
 }
+
