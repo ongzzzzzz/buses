@@ -3,38 +3,78 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>de-bus-sy</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="site.webmanifest">
 
+    <!-- <script type="application/javascript" src="https://cloud-cghq9wn45.vercel.app/emojirain.js"></script> -->
+
+    <!-- Primary Meta Tags -->
+    <title>de-bus-sy</title>
+    <meta name="title" content="de-bus-sy - vroom vroom!">
+    <meta name="description" content="Get a gist of which buses are zooming around the beautiful island of Penang and plan ahead!">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://buses.fogeinator.repl.co/">
+    <meta property="og:title" content="de-bus-sy - vroom vroom!">
+    <meta property="og:description" content="Get a gist of which buses are zooming around the beautiful island of Penang and plan ahead!">
+    <meta property="og:image" content="https://buses.fogeinator.repl.co/assets/bus.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://buses.fogeinator.repl.co/">
+    <meta property="twitter:title" content="de-bus-sy - vroom vroom!">
+    <meta property="twitter:description" content="Get a gist of which buses are zooming around the beautiful island of Penang and plan ahead!">
+    <meta property="twitter:image" content="https://buses.fogeinator.repl.co/assets/bus.png">
+
   </head>
   <body onload="startTime()">
-    <h1>
-      <code id="time"></code>
-      <!-- https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock -->
-    </h1>
 
-    <label for="location">Where does today's adventure take you?</label>
-    <textarea name="location" id="location" placeholder="o(*≧▽≦)ツ"></textarea>
-    <form>
+    <!-- <div id="emojis"></div> -->
+
+    <code id="time"></code>
+    <article id="info">
+      <h5 id="weatherText">weatherin'</h5>
+      <span id="tempHum"></span>
+      <img id="weather" src=""/>
+    </article>
+
+    <br>
+    <br>
+    <br>
+
+    <!-- <label for="location">We're going on a trip!</label> -->
+
+    <div id="autocomplete">
+      <input type="text" name="location" id="location" autocomplete="off"></input><button type="submit" id="submit" value="lets go!">lets go!</button>
+    </div>
+
       <!-- input bus stop, search from rapid API and change the get URL from there
       https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=gurney -->
-    </form>
 
     <table>
-      <tr>
-        <thead>
-          <th>Route</th>
-          <th>Going To</th>
-          <th>Next Bus:</th>
-        </thead>
-        <tbody id="tableBody"></tbody>
-        
-        <!-- <th>coming buses?</th> -->
-      </tr>
+      <thead>
+        <th>Route</th>
+        <th>Going To</th>
+        <th>Next Bus:</th>
+        <th>Next Next Bus:</th>
+      </thead>
+      <tbody id="tableBody"></tbody>
     </table>
+
     <script src="script.js"></script>
+    <script>
+      let searchbar = document.getElementById("location");
+      searchbar.addEventListener('input', () => {
+        request(`https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=${encodeURIComponent(searchbar.value)}`)
+        .then(arr => {
+          autocomplete(searchbar, arr);
+          return arr;
+        });
+      });
+
+    </script>
   </body>
 </html>

@@ -1,13 +1,18 @@
 let tableBody = document.getElementById("tableBody");
 
-const url = "https://jp.rapidpg.com.my:10081/open/api/searcheta?stopName=smk%20chung%20ling%20(p)(kampung%20baru)";
+//https://www.britishcouncil.my/exam/igcse-school/how-register/registration
+// /https://www.britishcouncil.my/exam/school
 
-var kawaii = ["ヾ(≧▽≦*)o", "q(≧▽≦q)", "(≧∇≦)ﾉ", "○( ＾皿＾)っ", "(❁´◡`❁)`", "(≧∀≦)ゞ"];
+let busUrl = "https://jp.rapidpg.com.my:10081/open/api/searcheta?stopName=smk%20chung%20ling%20(p)(kampung%20baru)";
+
+const weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=Pulau%20Pinang%2CMY&appid=1fc0a08ee4a7bf87ab0b7a9a786efa83&units=metric";
+
+var kawaii = ["ヾ(≧▽≦*)o", "q(≧▽≦q)", "(≧∇≦)ﾉ", "○( ＾皿＾)っ", "(❁´◡`❁)`", "(≧∀≦)ゞ", "O(∩_∩)O"];
 document.getElementById("location").placeholder = kawaii[Math.floor((Math.random() * kawaii.length))];
 
 function startTime() {
   var today = new Date();
-  var h = today.getHours();
+  var h = checkTime(today.getHours());
   var m = checkTime(today.getMinutes());
   var s = checkTime(today.getSeconds());
   document.getElementById('time').innerHTML =
@@ -15,8 +20,17 @@ function startTime() {
   var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
-  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-  return i;
+  return i<10 ? "0"+i : i;
+}
+
+async function request(url){
+  let response = await fetch(url);
+  let json = await response.json();
+  let arr = [];
+  json.forEach(stop => {
+    arr.push(stop.poiName);
+  });
+  return arr;
 }
 
 function appendToTable(data=[]){
@@ -39,15 +53,13 @@ function appendToTable(data=[]){
     var texts = [routeNumText, lingNumText];
 
     let etaList = route.etaList;    
-    if(etaList == undefined || etaList.length == 0){
-      var etaCell = document.createElement('td');
-      var etaText = document.createTextNode("whoops too bad!");
-      cells.push(etaCell);
-      texts.push(etaText);
-
-    } else {
-
-      for(h=0; h<etaList.length; h++){
+    for(h=0; h<2; h++){
+      if(etaList == null || etaList[h] == undefined){
+        var etaCell = document.createElement('td');
+        var etaText = document.createTextNode("whoops too bad!");
+        cells.push(etaCell);
+        texts.push(etaText);
+      } else{
         var etaCell = document.createElement('td');
         var etaText = document.createTextNode(`${etaList[h].eta} mins`);
         cells.push(etaCell);
@@ -65,21 +77,49 @@ function appendToTable(data=[]){
   return;
 }
 
+function updateWeather(data=[]){
+  let weatherIcon = document.getElementById("weather");
+  let weatherText = document.getElementById("weatherText");
+
+  weatherIcon.src = `https://openweathermap.org/img/w/${data[0].icon}.png`;
+  weatherText.innerHTML = data[0].description;
+}
+
+function updateTempHum(data={}){
+  let tempHum = document.getElementById("tempHum");
+  tempHum.innerHTML = `${data.temp}°C ${data.humidity}%`;
+}
+
 function getData(){
-  fetch(url).then( 
+  fetch(busUrl).then( 
     (response) => {
       if (response.status !== 200) {
-        console.error(`whoopsie daisie (Status Code: ${response.status})`);
+        console.error(`whoops bus fetch (Status Code: ${response.status})`);
         return;
       }
       response.json().then(data => {
-        console.log(data.body);
+        // console.log(data.body);
         appendToTable(data.body);
       });
-  }
-  ).catch((err) => {
+    }
+  ).then(
+    fetch(weatherUrl).then(
+      (response) => { 
+        if (response.status !== 200) {
+          console.error(`whoops weather fetch (Status Code: ${response.status})`);
+          return;
+        }
+        response.json().then(data => {
+          //data.main and data.weather
+          updateWeather(data.weather);
+          updateTempHum(data.main)
+        });
+      }
+    )    
+  ).catch(err => {
       console.error(`Fetch Error :-S ${err}`);
   });
+
 }
 
 getData();
@@ -87,13 +127,118 @@ window.setInterval(()=>{
   getData();
 }, 60*1000);
 
-/* 
-  TODO: add time 
+document.getElementById("submit").addEventListener("click", () => {
+  var stop = document.getElementById("location").value;
+  busUrl = `https://jp.rapidpg.com.my:10081/open/api/searcheta?stopName=${encodeURIComponent(stop)}`;
+  getData();
+});
 
-  TODO: add weather
+
+
+
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+    var a, b, i, val = this.value;
+    /*close any already open lists of autocompleted values*/
+    closeAllLists();
+    if (!val) { return false;}
+    currentFocus = -1;
+    /*create a DIV element that will contain the items (values):*/
+    a = document.createElement("DIV");
+    a.setAttribute("id", this.id + "autocomplete-list");
+    a.setAttribute("class", "autocomplete-items");
+    /*append the DIV element as a child of the autocomplete container:*/
+    this.parentNode.appendChild(a);
+    /*for each item in the array...*/
+    for (i = 0; i < arr.length; i++) {
+      /*create a DIV element for each matching element:*/
+      b = document.createElement("DIV");
+      /*make the matching letters bold:*/
+      b.innerHTML += arr[i];
+      /*insert a input field that will hold the current array item's value:*/
+      b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+      b.classList.add("stop");
+      /*execute a function when someone clicks on the item value (DIV element):*/
+      b.addEventListener("click", function(e) {
+        /*insert the value for the autocomplete text field:*/
+        inp.value = this.getElementsByTagName("input")[0].value;
+        /*close the list of autocompleted values, (or any other open lists of autocompleted values:*/
+        closeAllLists();
+      });
+      a.appendChild(b);
+    }   
+  });
+
+
+  /*execute a function presses a key on the keyboard:*/
+  // inp.addEventListener("keydown", function(e) {
+  //     var x = document.getElementById(this.id + "autocomplete-list");
+  //     if (x) x = x.getElementsByTagName("div");
+  //     if (e.keyCode == 40) {
+  //       /*If the arrow DOWN key is pressed,
+  //       increase the currentFocus variable:*/
+  //       currentFocus++;
+  //       /*and and make the current item more visible:*/
+  //       addActive(x);
+  //     } else if (e.keyCode == 38) { //up
+  //       /*If the arrow UP key is pressed,
+  //       decrease the currentFocus variable:*/
+  //       currentFocus--;
+  //       /*and and make the current item more visible:*/
+  //       addActive(x);
+  //     } else if (e.keyCode == 13) {
+  //       /*If the ENTER key is pressed, prevent the form from being submitted,*/
+  //       e.preventDefault();
+  //       if (currentFocus > -1) {
+  //         /*and simulate a click on the "active" item:*/
+  //         if (x) x[currentFocus].click();
+  //       }
+  //     }
+  // });
+  // function addActive(x) {
+  //   /*a function to classify an item as "active":*/
+  //   if (!x) return false;
+  //   /*start by removing the "active" class on all items:*/
+  //   removeActive(x);
+  //   if (currentFocus >= x.length) currentFocus = 0;
+  //   if (currentFocus < 0) currentFocus = (x.length - 1);
+  //   /*add class "autocomplete-active":*/
+  //   x[currentFocus].classList.add("autocomplete-active");
+  // }
+  // function removeActive(x) {
+  //   /*a function to remove the "active" class from all autocomplete items:*/
+  //   for (var i = 0; i < x.length; i++) {
+  //     x[i].classList.remove("autocomplete-active");
+  //   }
+  // }
+
+
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/* 
+  TODO: add other destination search
+  
   TODO: add map (Google map embed)
   TODO: deploy
-  TODO: add other destination search
+  
 */
 
 /////::::::::::SAMPLE JSON:::::::::://///
@@ -295,3 +440,36 @@ window.setInterval(()=>{
 //     "poiLon": "100.30851781368256"
 //   }
 // ]
+
+//weather example
+// { 
+//  coord: { lon: 100.26, lat: 5.38 },
+//   weather: 
+//    [ { id: 501,
+//        main: 'Rain',
+//        description: 'moderate rain',
+//        icon: '10d' } ],
+//   base: 'stations',
+//   main: 
+//    { temp: 25.55,
+//      feels_like: 29.56,
+//      temp_min: 25,
+//      temp_max: 26,
+//      pressure: 1009,
+//      humidity: 88 },
+//   visibility: 8000,
+//   wind: { speed: 2.1, deg: 50 },
+//   rain: { 1h: 1.33 },
+//   clouds: { all: 40 },
+//   dt: 1601029775,
+//   sys: 
+//    { type: 1,
+//      id: 9438,
+//      country: 'MY',
+//      sunrise: 1600988857,
+//      sunset: 1601032416 },
+//   timezone: 28800,
+//   id: 1733047,
+//   name: 'Penang',
+//   cod: 200 
+//  }
