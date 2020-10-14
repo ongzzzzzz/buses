@@ -7,6 +7,8 @@
     --background: rgba(240, 240, 240, 0.75);
     --text: rgba(23, 23, 23, 0.75);
     --active: rgba(200, 200, 200, 0.75);
+    --link: url("./assets/light.jpg");
+    --hover: rgba(255, 255, 255, 0.8);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -14,14 +16,20 @@
     --background: rgba(23, 23, 23, 0.75);
     --text: rgba(240, 240, 240, 0.75);
     --active: rgba(46, 46, 46, 0.75);
+    --link: url("./assets/dark.jpg");
+    --hover: rgba(0, 0, 0, 0.5);;
   }
 }
 
-/* TODO: beautify page, add icons and background */
+*{
+  backdrop-filter: blur(1px);
+}
+
 html, body{
   width: 100%;
   height: 100%;
-  background: url("background.jpg") no-repeat center center fixed;
+
+  background: var(--link) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -34,6 +42,8 @@ table{
   width: 100%; 
   background-color: var(--background);
   border-radius: 3vh;
+  position: relative;
+  z-index: -1;
 }
 
 #time{
@@ -57,9 +67,10 @@ table{
   color: var(--text);
 }
 
-#weather{
+#weatherIcon{
   width: 8vw;
   height: 8vw;
+  border-radius: 1vw;
 }
 #weatherText{
   z-index: 3;
@@ -72,7 +83,7 @@ table{
 #autocomplete{
   position: relative;
   display: inline-block;
-  /* https://www.w3schools.com/howto/howto_js_autocomplete.asp */
+  
   color: var(--text);
 }
 
@@ -96,7 +107,7 @@ button[type=submit] {
   border-bottom: none;
   border-top: none;
   z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
+  
   top: 100%;
   left: 0;
   right: 0;
@@ -108,12 +119,9 @@ button[type=submit] {
   border-bottom: 1px solid #d4d4d4;
 }
 .autocomplete-items div:hover {
-  /*when hovering an item:*/
-  background-color: #e9e9e9;
+  background-color: var(--hover);
 }
 .autocomplete-active {
-  /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: var(--active);
 }
-

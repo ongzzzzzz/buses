@@ -7,9 +7,7 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="site.webmanifest">
-
-    <!-- <script type="application/javascript" src="https://cloud-cghq9wn45.vercel.app/emojirain.js"></script> -->
-
+    
     <!-- Primary Meta Tags -->
     <title>de-bus-sy</title>
     <meta name="title" content="de-bus-sy - vroom vroom!">
@@ -45,37 +43,34 @@
   </head>
   <body onload="startTime()">
 
-    <!-- <div id="emojis"></div> -->
+    <div id="container">
 
-    <code id="time"></code>
-    <article id="info">
-      <h5 id="weatherText">weatherin'</h5>
-      <span id="tempHum"></span>
-      <img id="weather" src=""/>
-    </article>
+      <code id="time"></code>
+      <article id="info">
+        <h5 id="weatherText">weatherin'</h5>
+        <span id="tempHum"></span>
+        <img id="weatherIcon" src=""/>
+      </article>
 
-    <br>
-    <br>
-    <br>
+      <br>
+      <br>
+      <br>
 
-    <!-- <label for="location">We're going on a trip!</label> -->
+      <div id="autocomplete">
+        <input type="text" name="location" id="location" autocomplete="off"></input><button type="submit" id="submit" value="lets go!">lets go!</button>
+      </div>
 
-    <div id="autocomplete">
-      <input type="text" name="location" id="location" autocomplete="off"></input><button type="submit" id="submit" value="lets go!">lets go!</button>
+      <table>
+        <thead>
+          <th>Route</th>
+          <th>Going To</th>
+          <th>Next Bus:</th>
+          <th>Next Next Bus:</th>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+
     </div>
-
-      <!-- input bus stop, search from rapid API and change the get URL from there
-      https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=gurney -->
-
-    <table>
-      <thead>
-        <th>Route</th>
-        <th>Going To</th>
-        <th>Next Bus:</th>
-        <th>Next Next Bus:</th>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
 
     <script src="script.js"></script>
     <script>
