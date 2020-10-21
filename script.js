@@ -1,8 +1,5 @@
 let tableBody = document.getElementById("tableBody");
 
-//https://www.britishcouncil.my/exam/igcse-school/how-register/registration
-// /https://www.britishcouncil.my/exam/school
-
 let busUrl = "https://jp.rapidpg.com.my:10081/open/api/searcheta?stopName=smk%20chung%20ling%20(p)(kampung%20baru)";
 
 const weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=Pulau%20Pinang%2CMY&appid=1fc0a08ee4a7bf87ab0b7a9a786efa83&units=metric";
