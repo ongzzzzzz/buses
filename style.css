@@ -35,6 +35,7 @@ html, body{
   -o-background-size: cover;
   background-size: cover;
   
+	scroll-behavior: smooth;
 }
 
 table{
