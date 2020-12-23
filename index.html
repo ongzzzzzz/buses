@@ -76,8 +76,10 @@
     <script>
       let searchbar = document.getElementById("location");
       searchbar.addEventListener('input', () => {
-        request(`https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=${encodeURIComponent(searchbar.value)}`)
+        fetch(`https://jp.rapidpg.com.my:10081/open/api/gtfs-search-pois?query=${encodeURIComponent(searchbar.value)}`)
+				.then(res => res.json())
         .then(arr => {
+					// console.log(arr)
           autocomplete(searchbar, arr);
           return arr;
         });

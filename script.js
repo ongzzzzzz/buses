@@ -144,9 +144,9 @@ function autocomplete(inp, arr) {
     for (i = 0; i < arr.length; i++) {
       /*create a DIV element for each thing*/
       b = document.createElement("DIV");
-      b.innerHTML += arr[i];
+      b.innerHTML += arr[i].poiName;
       /*insert a input field with the current array item's value:*/
-      b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+      b.innerHTML += "<input type='hidden' value='" + arr[i].poiName + "'>";
       b.classList.add("stop");
       /* when someone clicks on the item value*/
       b.addEventListener("click", function(e) {
